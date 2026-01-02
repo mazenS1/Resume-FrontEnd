@@ -36,7 +36,7 @@ const App = () => {
     }
   }, [activeResumeId, savedResumes, resume, setResume]);
 
-  // Show landing page if user hasn't seen it yet
+  // Show landing page for new visitors
   if (!hasSeenLanding) {
     return <LandingPage />;
   }

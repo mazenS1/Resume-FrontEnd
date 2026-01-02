@@ -1,295 +1,440 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  FileText,
-  Globe,
-  Sparkles,
-  Shield,
-  WifiOff,
-  Lock,
-  Zap,
-  GripVertical,
-  Eye,
-  CheckCircle2,
   ArrowLeft,
+  Shield,
+  Lock,
+  Eye,
+  Server,
   Github,
-  FileDown,
+  FileText,
+  Languages,
+  Download,
   Palette,
+  Sparkles,
+  Wifi,
+  Heart,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useAppModeStore } from "@/store/appModeStore";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { cn } from "@/lib/utils";
+
+// Custom hook for intersection observer (scroll animations)
+const useInView = (options = {}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(element); // Only animate once
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px", ...options }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, isInView };
+};
+
+// Animated section wrapper component
+const AnimatedSection = ({
+  children,
+  className,
+  delay = 0,
+  id
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  id?: string;
+}) => {
+  const { ref, isInView } = useInView();
+
+  return (
+    <section
+      ref={ref}
+      id={id}
+      className={cn(
+        "transition-all duration-700",
+        isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+        className
+      )}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </section>
+  );
+};
+
+// Resume template data for carousel
+const resumeTemplates = [
+  {
+    id: 1,
+    name: "أحمد محمد الخالدي",
+    title: "مهندس برمجيات أول",
+    skills: ["React", "Node.js", "Python", "AWS"],
+    color: "#2a2825",
+    accent: "#3d3a36"
+  },
+  {
+    id: 2,
+    name: "سارة أحمد العلي",
+    title: "مديرة تسويق رقمي",
+    skills: ["SEO", "Analytics", "Content", "Ads"],
+    color: "#1e3a5f",
+    accent: "#2d4a6f"
+  },
+  {
+    id: 3,
+    name: "محمد خالد الرشيد",
+    title: "محلل بيانات",
+    skills: ["SQL", "Tableau", "Python", "Excel"],
+    color: "#2d3436",
+    accent: "#404548"
+  }
+];
 
 export const LandingPage = () => {
   const setHasSeenLanding = useAppModeStore((state) => state.setHasSeenLanding);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentTemplate, setCurrentTemplate] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in");
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    document.querySelectorAll(".animate-on-scroll").forEach((el) => {
-      observerRef.current?.observe(el);
-    });
-
-    return () => observerRef.current?.disconnect();
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Auto-rotate templates
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentTemplate((prev) => (prev + 1) % resumeTemplates.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const nextTemplate = useCallback(() => {
+    setIsAutoPlaying(false);
+    setCurrentTemplate((prev) => (prev + 1) % resumeTemplates.length);
+  }, []);
+
+  const prevTemplate = useCallback(() => {
+    setIsAutoPlaying(false);
+    setCurrentTemplate((prev) => (prev - 1 + resumeTemplates.length) % resumeTemplates.length);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleGetStarted = () => {
     setHasSeenLanding(true);
   };
 
-  const features = [
-    {
-      icon: Globe,
-      titleAr: "عربي وإنجليزي",
-      descAr: "دعم كامل للعربية مع اتجاه RTL والإنجليزية مع LTR",
-      gradient: "from-amber-500 to-yellow-500",
-    },
-    {
-      icon: Sparkles,
-      titleAr: "متوافق مع ATS",
-      descAr: "تصميم نظيف يتجاوز أنظمة فحص السير الذاتية",
-      gradient: "from-yellow-500 to-orange-500",
-    },
-    {
-      icon: WifiOff,
-      titleAr: "يعمل بدون نت",
-      descAr: "كل شي محفوظ على جهازك، ما يحتاج اتصال",
-      gradient: "from-orange-500 to-red-500",
-    },
-    {
-      icon: Lock,
-      titleAr: "خصوصية تامة",
-      descAr: "بياناتك ما تغادر جهازك، أبداً",
-      gradient: "from-emerald-500 to-teal-500",
-    },
-    {
-      icon: FileDown,
-      titleAr: "تصدير PDF و Word",
-      descAr: "صدّر سيرتك بصيغة PDF أو DOCX بضغطة زر",
-      gradient: "from-amber-400 to-yellow-600",
-    },
-    {
-      icon: GripVertical,
-      titleAr: "سحب وإفلات",
-      descAr: "رتّب أقسام سيرتك بسهولة بالسحب والإفلات",
-      gradient: "from-yellow-400 to-amber-600",
-    },
-    {
-      icon: Palette,
-      titleAr: "تخصيص كامل",
-      descAr: "غيّر الألوان والخطوط حسب ذوقك",
-      gradient: "from-orange-400 to-amber-500",
-    },
-    {
-      icon: Zap,
-      titleAr: "حفظ تلقائي",
-      descAr: "تغييراتك تتحفظ تلقائياً كل ثانية",
-      gradient: "from-yellow-500 to-amber-500",
-    },
-  ];
-
-  const steps = [
-    {
-      numberAr: "١",
-      titleAr: "اختر اللغة",
-      descAr: "حدد إذا تبي سيرتك بالعربي أو الإنجليزي",
-      gradient: "from-amber-400 to-yellow-500",
-    },
-    {
-      numberAr: "٢",
-      titleAr: "عبّي بياناتك",
-      descAr: "أضف خبراتك ومهاراتك وتعليمك",
-      gradient: "from-yellow-500 to-amber-600",
-    },
-    {
-      numberAr: "٣",
-      titleAr: "صدّر وقدّم",
-      descAr: "حمّل سيرتك PDF أو Word وقدّم على الوظائف",
-      gradient: "from-amber-500 to-orange-500",
-    },
-  ];
-
   return (
-    <div
-      className="min-h-screen bg-background dark:bg-[#0a0a0f] overflow-hidden"
-      dir="rtl"
-    >
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Gradient Orbs */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-amber-500/20 via-yellow-500/10 to-transparent rounded-full blur-3xl animate-float opacity-60 dark:opacity-40" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-yellow-500/20 via-orange-500/10 to-transparent rounded-full blur-3xl animate-float-delayed opacity-50 dark:opacity-30" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 via-transparent to-amber-500/10 rounded-full blur-3xl animate-pulse-slow opacity-40 dark:opacity-20" />
+    <div className="min-h-screen bg-[#1a1a1a] text-[#fafafa] overflow-hidden" dir="rtl">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 bg-[#1a1a1a]/80 backdrop-blur-md border-b border-[#2a2a2a]">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div
+            className={cn(
+              "transition-all duration-700",
+              isVisible ? "opacity-100" : "opacity-0"
+            )}
+          >
+            <span
+              className="text-lg tracking-[0.2em] font-light uppercase"
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              سيرة
+            </span>
+          </div>
 
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-      </div>
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8">
+            {[
+              { label: "المميزات", id: "features" },
+              { label: "الأمان", id: "security" },
+              { label: "كيف يعمل", id: "how-it-works" },
+            ].map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollToSection(link.id)}
+                className="text-xs tracking-[0.1em] uppercase text-[#9a9a9a] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded px-2 py-1"
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 dark:bg-[#0a0a0f]/60 backdrop-blur-xl border-b border-border/50 dark:border-white/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:shadow-amber-500/40 transition-shadow duration-300">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <a
-                href="https://github.com/mazenS1/Resume-FrontEnd"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg hover:bg-muted dark:hover:bg-white/5 transition-all duration-300 hover:scale-105"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <Button
-                onClick={handleGetStarted}
-                size="sm"
-                className="hidden sm:flex bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-500/90 hover:to-yellow-600/90 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all duration-300 hover:scale-105"
-              >
-                ابدأ الآن
-                <ArrowLeft className="w-4 h-4 mr-2" />
-              </Button>
-            </div>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <a
+              href="https://github.com/mazenS1/ResumeArab"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#9a9a9a] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded p-1"
+              aria-label="View on GitHub"
+            >
+              <Github className="w-5 h-5" />
+            </a>
+            <button
+              onClick={handleGetStarted}
+              className={cn(
+                "text-xs tracking-[0.15em] uppercase text-[#b0b0b0] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded px-2 py-1",
+                isVisible ? "opacity-100" : "opacity-0"
+              )}
+            >
+              ابدأ الآن
+            </button>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/10 to-yellow-500/10 dark:from-amber-500/20 dark:to-yellow-500/20 border border-amber-500/20 dark:border-amber-500/30 text-amber-600 dark:text-amber-400 text-sm font-medium mb-6 animate-fade-in-down backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 animate-pulse" />
-              مجاني ومفتوح المصدر
+      <section className="relative min-h-screen flex flex-col justify-center px-4 sm:px-8 lg:px-16 pt-24 overflow-hidden">
+        <div className="absolute top-0 bottom-0 right-[15%] w-px bg-gradient-to-b from-transparent via-[#444] to-transparent opacity-50 hidden sm:block" />
+
+        <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-24 items-center py-16 sm:py-32">
+          {/* Text Column - Always first on mobile for context */}
+          <div className="order-1">
+            <div
+              className={cn(
+                "mb-8 transition-all duration-700 delay-200",
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              )}
+            >
+              <span className="text-xs tracking-[0.3em] uppercase text-[#666]">
+                منشئ السيرة الذاتية
+              </span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-relaxed mb-6 animate-fade-in-up animation-delay-100">
-              <span className="text-foreground dark:text-white block mb-4">
-                سيرة ذاتية
-              </span>
-              <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent animate-gradient">
-                احترافية
-              </span>
-              <span className="text-foreground dark:text-white">في دقايق</span>
+            <h1
+              className={cn(
+                "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal leading-[0.9] mb-6 sm:mb-8 transition-all duration-700 delay-300",
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              )}
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              <span className="block">سيرة ذاتية</span>
+              <span className="block mt-2 italic text-[#c9a96e]">استثنائية</span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-muted-foreground dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-              منشئ سيرة ذاتية مجاني يدعم العربية والإنجليزية، يعمل بدون نت،
-              ويحافظ على خصوصية بياناتك بالكامل
+            <p
+              className={cn(
+                "text-[#a0a0a0] text-base sm:text-lg lg:text-xl leading-relaxed max-w-md mb-8 sm:mb-12 transition-all duration-700 delay-500",
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              )}
+            >
+              صمّم سيرتك الذاتية بأناقة تليق بطموحاتك المهنية.
+              متوافقة مع أنظمة التوظيف، بتصميم راقٍ لا يُنسى.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-300">
-              <Button
+            <div
+              className={cn(
+                "transition-all duration-700 delay-700",
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              )}
+            >
+              <button
                 onClick={handleGetStarted}
-                size="lg"
-                className="w-full sm:w-auto h-14 px-8 text-lg font-semibold bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-500/90 hover:to-yellow-600/90 shadow-xl shadow-amber-500/30 hover:shadow-amber-500/50 transition-all duration-300 hover:scale-105 group"
+                className="group inline-flex items-center gap-3 sm:gap-4 bg-[#fafafa] text-[#1a1a1a] px-6 sm:px-10 py-4 sm:py-5 text-sm tracking-[0.15em] uppercase hover:bg-[#c9a96e] hover:text-[#1a1a1a] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
               >
-                ابدأ الآن مجاناً
-                <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-              </Button>
-              <a
-                href="https://github.com/mazenS1/Resume-FrontEnd"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto h-14 px-8 text-lg border-2 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-                >
-                  <Github className="w-5 h-5 ml-2" />
-                  شوف الكود
-                </Button>
-              </a>
+                <span>ابدأ مجاناً</span>
+                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              </button>
             </div>
 
-            {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-6 mt-10 text-sm text-muted-foreground dark:text-gray-500 animate-fade-in-up animation-delay-400">
-              {["بدون تسجيل", "بدون بطاقة ائتمان", "مجاني للأبد"].map(
-                (text, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 hover:text-foreground dark:hover:text-gray-300 transition-colors"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    {text}
-                  </div>
-                )
+            <div
+              className={cn(
+                "flex flex-wrap gap-6 sm:gap-12 mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-[#333] transition-all duration-700 delay-900",
+                isVisible ? "opacity-100" : "opacity-0"
               )}
+            >
+              {[
+                { label: "خصوصية تامة", value: "١٠٠٪" },
+                { label: "بدون تسجيل", value: "مجاني" },
+                { label: "عربي وإنجليزي", value: "RTL" },
+              ].map((stat, index) => (
+                <div key={index}>
+                  <div
+                    className="text-xl sm:text-2xl lg:text-3xl font-normal text-[#c9a96e] mb-1"
+                    style={{ fontFamily: "'Amiri', serif" }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div className="text-[10px] sm:text-xs tracking-[0.1em] uppercase text-[#a8a8a8]">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Hero Preview */}
-          <div className="mt-16 relative animate-fade-in-up animation-delay-500">
-            {/* Glow Effect */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-orange-500/20 rounded-3xl blur-2xl opacity-60 dark:opacity-40 animate-pulse-slow" />
+          {/* Resume Preview Column - Interactive Carousel */}
+          <div className="order-2 relative px-2 sm:px-0">
+            <div
+              className={cn(
+                "relative transition-all duration-700 delay-500",
+                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              )}
+            >
+              {/* Decorative borders - hidden on mobile to prevent overflow */}
+              <div className="absolute -inset-8 border border-[#333] hidden sm:block" />
+              <div className="absolute -inset-4 border border-[#444] hidden sm:block" />
 
-            <div className="relative bg-gradient-to-b from-white/50 to-white/30 dark:from-white/5 dark:to-white/[0.02] rounded-2xl p-4 sm:p-8 border border-border/50 dark:border-white/10 backdrop-blur-sm">
-              <div className="bg-white dark:bg-[#12121a] rounded-xl shadow-2xl overflow-hidden border border-border dark:border-white/10">
-                {/* Browser Chrome */}
-                <div className="bg-gray-50 dark:bg-white/5 px-4 py-3 border-b border-border dark:border-white/10 flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400 hover:bg-red-500 transition-colors cursor-pointer" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400 hover:bg-yellow-500 transition-colors cursor-pointer" />
-                    <div className="w-3 h-3 rounded-full bg-green-400 hover:bg-green-500 transition-colors cursor-pointer" />
-                  </div>
-                  <div className="flex-1 mx-4">
-                    <div className="bg-white dark:bg-white/10 rounded-md px-3 py-1.5 text-xs text-muted-foreground text-center border dark:border-white/10">
-                      resumearab.com
-                    </div>
-                  </div>
-                </div>
-                {/* App Preview */}
-                <div className="p-6 sm:p-8 grid md:grid-cols-2 gap-6">
-                  {/* Editor Side */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                      <FileText className="w-4 h-4" />
-                      تحرير السيرة
-                    </div>
-                    <div className="space-y-3">
-                      <div className="h-10 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 rounded-lg animate-shimmer" />
-                      <div className="h-10 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 rounded-lg animate-shimmer animation-delay-100" />
-                      <div className="h-24 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 rounded-lg animate-shimmer animation-delay-200" />
-                      <div className="h-10 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/10 dark:to-white/5 rounded-lg w-3/4 animate-shimmer animation-delay-300" />
-                    </div>
-                  </div>
-                  {/* Preview Side */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                      <Eye className="w-4 h-4" />
-                      المعاينة
-                    </div>
-                    <div className="bg-white dark:bg-[#0a0a0f] border border-border dark:border-white/10 rounded-lg p-4 shadow-sm">
-                      <div className="space-y-3 text-right">
-                        <div className="h-6 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded w-1/2" />
-                        <div className="h-3 bg-gray-200 dark:bg-white/10 rounded w-3/4" />
-                        <div className="h-3 bg-gray-200 dark:bg-white/10 rounded w-1/2" />
-                        <div className="border-t border-border dark:border-white/10 my-3" />
-                        <div className="h-4 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded w-1/3" />
-                        <div className="h-2 bg-gray-100 dark:bg-white/5 rounded" />
-                        <div className="h-2 bg-gray-100 dark:bg-white/5 rounded w-5/6" />
-                        <div className="h-2 bg-gray-100 dark:bg-white/5 rounded w-4/5" />
+              {/* Template Carousel */}
+              <div className="relative overflow-hidden">
+                <div
+                  className="flex transition-transform duration-500 ease-out"
+                  style={{ transform: `translateX(${currentTemplate * 100}%)` }}
+                >
+                  {resumeTemplates.map((template) => (
+                    <div
+                      key={template.id}
+                      className="w-full flex-shrink-0"
+                    >
+                      <div
+                        className="relative text-[#d4d0cb] p-4 sm:p-8 lg:p-12 aspect-[8.5/11] shadow-2xl transition-colors duration-500"
+                        style={{ backgroundColor: template.color }}
+                      >
+                        <div className="space-y-4 sm:space-y-6">
+                          <div
+                            className="text-center pb-4 sm:pb-6 border-b transition-colors duration-500"
+                            style={{ borderColor: template.accent }}
+                          >
+                            <div
+                              className="text-lg sm:text-2xl lg:text-3xl font-medium text-[#e8e4df]"
+                              style={{ fontFamily: "'Amiri', serif" }}
+                            >
+                              {template.name}
+                            </div>
+                            <div className="text-[10px] sm:text-xs tracking-[0.15em] uppercase text-[#a09a92] mt-1 sm:mt-2">
+                              {template.title}
+                            </div>
+                          </div>
+
+                          <div className="space-y-3 sm:space-y-4">
+                            <div>
+                              <div className="text-[8px] sm:text-[10px] tracking-[0.2em] uppercase text-[#8a857d] mb-1 sm:mb-2">
+                                الخبرات
+                              </div>
+                              <div className="space-y-1">
+                                <div
+                                  className="h-1.5 sm:h-2 rounded w-full transition-colors duration-500"
+                                  style={{ backgroundColor: template.accent }}
+                                />
+                                <div
+                                  className="h-1.5 sm:h-2 rounded w-4/5 transition-colors duration-500"
+                                  style={{ backgroundColor: template.accent }}
+                                />
+                                <div
+                                  className="h-1.5 sm:h-2 rounded w-3/4 transition-colors duration-500"
+                                  style={{ backgroundColor: template.accent }}
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="text-[8px] sm:text-[10px] tracking-[0.2em] uppercase text-[#8a857d] mb-1 sm:mb-2">
+                                التعليم
+                              </div>
+                              <div className="space-y-1">
+                                <div
+                                  className="h-1.5 sm:h-2 rounded w-full transition-colors duration-500"
+                                  style={{ backgroundColor: template.accent }}
+                                />
+                                <div
+                                  className="h-1.5 sm:h-2 rounded w-2/3 transition-colors duration-500"
+                                  style={{ backgroundColor: template.accent }}
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="text-[8px] sm:text-[10px] tracking-[0.2em] uppercase text-[#8a857d] mb-1 sm:mb-2">
+                                المهارات
+                              </div>
+                              <div className="flex flex-wrap gap-1 sm:gap-2">
+                                {template.skills.map((skill) => (
+                                  <span
+                                    key={skill}
+                                    className="px-2 sm:px-3 py-0.5 sm:py-1 text-[#b0aaa2] text-[8px] sm:text-[10px] tracking-wider transition-colors duration-500"
+                                    style={{ backgroundColor: template.accent }}
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent pointer-events-none"
+                          style={{ background: `linear-gradient(to top, ${template.color}, transparent)` }}
+                        />
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
+
+                {/* Carousel Controls */}
+                <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 flex items-center justify-between">
+                  <button
+                    onClick={prevTemplate}
+                    className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white hover:bg-[#c9a96e] hover:text-[#1a1a1a] hover:border-[#c9a96e] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    aria-label="القالب السابق"
+                  >
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+
+                  {/* Dots indicator */}
+                  <div className="flex gap-1.5 sm:gap-2">
+                    {resumeTemplates.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setIsAutoPlaying(false);
+                          setCurrentTemplate(index);
+                        }}
+                        className={cn(
+                          "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]",
+                          currentTemplate === index
+                            ? "bg-[#c9a96e] w-4 sm:w-6"
+                            : "bg-[#555] hover:bg-[#777]"
+                        )}
+                        aria-label={`انتقل للقالب ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={nextTemplate}
+                    className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white hover:bg-[#c9a96e] hover:text-[#1a1a1a] hover:border-[#c9a96e] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    aria-label="القالب التالي"
+                  >
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                className={cn(
+                  "absolute -bottom-3 sm:-bottom-6 left-2 sm:-left-6 bg-[#c9a96e] text-[#1a1a1a] px-4 sm:px-6 py-2 sm:py-3 text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-700 delay-1000",
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                )}
+              >
+                ATS متوافق
               </div>
             </div>
           </div>
@@ -297,408 +442,327 @@ export const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/50 dark:via-white/[0.02] to-transparent" />
-        <div className="max-w-6xl mx-auto relative">
-          <div className="text-center mb-16 animate-on-scroll opacity-0 translate-y-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground dark:text-white mb-4">
-              كل اللي تحتاجه في{" "}
-              <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
-                مكان واحد
-              </span>
+      <AnimatedSection
+        id="features"
+        className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+              المميزات
+            </span>
+            <h2
+              className="text-4xl lg:text-5xl font-normal"
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              كل ما تحتاجه في <span className="italic text-[#c9a96e]">مكان واحد</span>
             </h2>
-            <p className="text-lg text-muted-foreground dark:text-gray-400 max-w-2xl mx-auto">
-              ميزات قوية تساعدك تسوي سيرة ذاتية تبرز بين المتقدمين
-            </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="animate-on-scroll opacity-0 translate-y-8 group"
-                style={{ transitionDelay: `${index * 50}ms` }}
-              >
-                <div className="relative h-full bg-white/50 dark:bg-white/[0.03] rounded-2xl p-6 border border-border/50 dark:border-white/10 hover:border-transparent transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:hover:shadow-primary/10 overflow-hidden">
-                  {/* Gradient Border on Hover */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}
-                  />
-                  <div
-                    className={`absolute inset-[1px] bg-white dark:bg-[#12121a] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                  />
-
-                  <div className="relative">
-                    <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}
-                    >
-                      <feature.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="font-semibold text-foreground dark:text-white mb-2 group-hover:text-primary transition-colors">
-                      {feature.titleAr}
-                    </h3>
-                    <p className="text-sm text-muted-foreground dark:text-gray-400">
-                      {feature.descAr}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16 animate-on-scroll opacity-0 translate-y-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground dark:text-white mb-4">
-              ثلاث خطوات{" "}
-              <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-                بس
-              </span>
-            </h2>
-            <p className="text-lg text-muted-foreground dark:text-gray-400">
-              سيرتك الذاتية جاهزة في أقل من 10 دقايق
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connector Line */}
-            <div className="hidden md:block absolute top-16 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500 opacity-30" />
-
-            {steps.map((step, index) => (
-              <div
-                key={index}
-                className="text-center relative animate-on-scroll opacity-0 translate-y-8"
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <div
-                  className={`relative w-24 h-24 rounded-full bg-gradient-to-br ${step.gradient} flex items-center justify-center mx-auto mb-6 text-4xl font-bold text-white shadow-2xl shadow-primary/20 group hover:scale-110 transition-transform duration-300`}
-                >
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
-                  <span className="relative">{step.numberAr}</span>
-                  {/* Ping Animation */}
-                  <div
-                    className={`absolute inset-0 rounded-full bg-gradient-to-br ${step.gradient} animate-ping opacity-20`}
-                  />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground dark:text-white mb-3">
-                  {step.titleAr}
-                </h3>
-                <p className="text-muted-foreground dark:text-gray-400">
-                  {step.descAr}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Privacy Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-cyan-500/5 dark:from-emerald-500/10 dark:via-teal-500/5 dark:to-cyan-500/10" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
-
-        <div className="max-w-4xl mx-auto relative">
-          <div className="text-center mb-12 animate-on-scroll opacity-0 translate-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-6 backdrop-blur-sm">
-              <Shield className="w-4 h-4 animate-pulse" />
-              خصوصيتك أولويتنا
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground dark:text-white mb-4">
-              بياناتك{" "}
-              <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
-                ملكك وحدك
-              </span>
-            </h2>
-            <p className="text-lg text-muted-foreground dark:text-gray-400 max-w-2xl mx-auto">
-              ما نجمع أي بيانات، ما نرسل شي لأي سيرفر، وما نشارك معلوماتك مع أحد
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: Lock,
-                title: "تخزين محلي",
-                desc: "كل بياناتك محفوظة في متصفحك فقط",
+                icon: Languages,
+                title: "عربي وإنجليزي",
+                desc: "دعم كامل للغتين مع تنسيق RTL احترافي يراعي اتجاه الكتابة",
               },
               {
-                icon: WifiOff,
-                title: "بدون سيرفر",
-                desc: "التطبيق يشتغل كامل بدون أي اتصال بالإنترنت",
+                icon: Sparkles,
+                title: "متوافق مع ATS",
+                desc: "تصميم مُحسّن ليمر من أنظمة تتبع المتقدمين بنجاح تام",
               },
               {
-                icon: Shield,
-                title: "مفتوح المصدر",
-                desc: "الكود متاح للجميع، شوف بنفسك كيف يشتغل",
+                icon: Palette,
+                title: "تخصيص كامل",
+                desc: "تحكم بالألوان والخطوط والتنسيق لتعكس شخصيتك المهنية",
               },
-            ].map((item, index) => (
+              {
+                icon: Download,
+                title: "تصدير متعدد",
+                desc: "حمّل سيرتك بصيغة PDF أو Word بضغطة واحدة",
+              },
+              {
+                icon: Wifi,
+                title: "يعمل بدون إنترنت",
+                desc: "التطبيق يعمل بالكامل على جهازك حتى بدون اتصال",
+              },
+              {
+                icon: FileText,
+                title: "قوالب احترافية",
+                desc: "قوالب مصممة بعناية فائقة لتعكس احترافيتك",
+              },
+            ].map((feature, index) => (
               <div
                 key={index}
-                className="animate-on-scroll opacity-0 translate-y-8 group"
-                style={{ transitionDelay: `${index * 100}ms` }}
+                className="group p-8 border border-[#2a2a2a] hover:border-[#c9a96e]/30 bg-[#1f1f1f] hover:bg-[#242424] transition-all duration-500 focus-within:ring-2 focus-within:ring-[#c9a96e]"
               >
-                <div className="bg-white/70 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-emerald-500/20 dark:border-emerald-500/10 text-center hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                    <item.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-foreground dark:text-white mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">
-                    {item.desc}
-                  </p>
-                </div>
+                <feature.icon className="w-8 h-8 text-[#c9a96e] mb-6" strokeWidth={1.5} />
+                <h3
+                  className="text-xl mb-3 text-[#fafafa]"
+                  style={{ fontFamily: "'Amiri', serif" }}
+                >
+                  {feature.title}
+                </h3>
+                <p className="text-[#a8a8a8] text-sm leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* Bilingual Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="animate-on-scroll opacity-0 translate-y-8">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground dark:text-white mb-4">
-                عربي أو إنجليزي؟
-                <br />
-                <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
-                  كلاهما!
-                </span>
+      {/* Security Section */}
+      <AnimatedSection
+        id="security"
+        className="py-32 px-8 lg:px-16 bg-[#151515] border-t border-[#2a2a2a]"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+                الأمان والخصوصية
+              </span>
+              <h2
+                className="text-4xl lg:text-5xl font-normal mb-8"
+                style={{ fontFamily: "'Amiri', serif" }}
+              >
+                خصوصيتك <span className="italic text-[#c9a96e]">أولويتنا</span>
               </h2>
-              <p className="text-lg text-muted-foreground dark:text-gray-400 mb-6">
-                سواء تبي سيرتك بالعربي للوظائف المحلية أو بالإنجليزي للشركات
-                العالمية، التطبيق يدعم اللغتين بشكل كامل.
+              <p className="text-[#a8a8a8] text-lg leading-relaxed mb-8">
+                نؤمن بأن بياناتك الشخصية ملكك وحدك. لذلك صممنا التطبيق ليعمل بالكامل على جهازك دون الحاجة لإرسال أي معلومات لخوادم خارجية.
               </p>
-              <ul className="space-y-4">
-                {[
-                  "دعم كامل للعربية مع اتجاه RTL",
-                  "خطوط عربية وإنجليزية احترافية",
-                  "نماذج جاهزة باللغتين",
-                ].map((text, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center gap-3 text-muted-foreground dark:text-gray-400 group"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <CheckCircle2 className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="group-hover:text-foreground dark:group-hover:text-white transition-colors">
-                      {text}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <button
+                onClick={handleGetStarted}
+                className="inline-flex items-center gap-3 text-[#c9a96e] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#151515] rounded px-2 py-1"
+              >
+                <span className="text-sm tracking-[0.1em] uppercase">ابدأ بأمان</span>
+                <ArrowLeft className="w-4 h-4" />
+              </button>
             </div>
-            <div className="relative animate-on-scroll opacity-0 translate-y-8 animation-delay-200">
-              {/* Glow */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-3xl blur-2xl opacity-60 dark:opacity-40" />
 
-              <div className="relative bg-gradient-to-br from-white/50 to-white/30 dark:from-white/5 dark:to-white/[0.02] rounded-2xl p-6 border border-border/50 dark:border-white/10 backdrop-blur-sm">
-                <div className="grid grid-cols-2 gap-4">
-                  <div
-                    className="bg-white dark:bg-[#12121a] rounded-xl p-4 border border-border dark:border-white/10 text-right shadow-lg hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300"
-                    dir="rtl"
-                  >
-                    <div className="text-xs text-muted-foreground mb-3 font-medium">
-                      العربية
-                    </div>
-                    <div className="h-5 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded mb-3 w-3/4" />
-                    <div className="space-y-2">
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded" />
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded w-5/6" />
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded w-4/6" />
-                    </div>
-                  </div>
-                  <div
-                    className="bg-white dark:bg-[#12121a] rounded-xl p-4 border border-border dark:border-white/10 text-left shadow-lg hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300"
-                    dir="ltr"
-                  >
-                    <div className="text-xs text-muted-foreground mb-3 font-medium">
-                      English
-                    </div>
-                    <div className="h-5 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded mb-3 w-3/4" />
-                    <div className="space-y-2">
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded" />
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded w-5/6" />
-                      <div className="h-2 bg-gray-200 dark:bg-white/10 rounded w-4/6" />
-                    </div>
-                  </div>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {[
+                {
+                  icon: Lock,
+                  title: "تشفير محلي",
+                  desc: "بياناتك محفوظة على جهازك فقط",
+                },
+                {
+                  icon: Server,
+                  title: "بدون خوادم",
+                  desc: "لا نحتفظ بأي بيانات على خوادمنا",
+                },
+                {
+                  icon: Eye,
+                  title: "بدون تتبع",
+                  desc: "لا نستخدم أي أدوات تتبع أو تحليل",
+                },
+                {
+                  icon: Shield,
+                  title: "مفتوح المصدر",
+                  desc: "الكود متاح للجميع للمراجعة والتدقيق",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="p-6 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#c9a96e]/30 transition-colors duration-300"
+                >
+                  <item.icon className="w-6 h-6 text-[#c9a96e] mb-4" strokeWidth={1.5} />
+                  <h3 className="text-base mb-2 text-[#fafafa]">{item.title}</h3>
+                  <p className="text-[#9a9a9a] text-sm">{item.desc}</p>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* Final CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-yellow-600 to-orange-600" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float-delayed" />
+      {/* Open Source Section */}
+      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#333] mb-8">
+            <Github className="w-10 h-10 text-[#c9a96e]" strokeWidth={1.5} />
+          </div>
 
-        <div className="max-w-4xl mx-auto text-center relative">
-          <div className="animate-on-scroll opacity-0 translate-y-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              جاهز تبني سيرتك الذاتية؟
-            </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-              ابدأ الآن مجاناً وبدون تسجيل. سيرتك الذاتية الاحترافية على بعد
-              دقايق قليلة.
-            </p>
-            <Button
-              onClick={handleGetStarted}
-              size="lg"
-              className="h-14 px-10 text-lg font-semibold bg-white text-amber-600 hover:bg-white/90 shadow-2xl shadow-black/20 hover:scale-105 transition-all duration-300 group"
+          <h2
+            className="text-4xl lg:text-5xl font-normal mb-6"
+            style={{ fontFamily: "'Amiri', serif" }}
+          >
+            مفتوح <span className="italic text-[#c9a96e]">المصدر</span>
+          </h2>
+
+          <p className="text-[#a8a8a8] text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
+            نؤمن بالشفافية والمشاركة. الكود المصدري متاح بالكامل على GitHub.
+            يمكنك المساهمة في تطوير المشروع أو استخدامه كما تشاء.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://github.com/mazenS1/ResumeArab"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 bg-[#fafafa] text-[#1a1a1a] px-8 py-4 text-sm tracking-[0.1em] uppercase hover:bg-[#c9a96e] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
             >
-              ابدأ الآن
-              <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-            </Button>
+              <Github className="w-5 h-5" />
+              <span>عرض على GitHub</span>
+            </a>
+            <button
+              onClick={handleGetStarted}
+              className="inline-flex items-center justify-center gap-3 border border-[#444] text-[#fafafa] px-8 py-4 text-sm tracking-[0.1em] uppercase hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+            >
+              <span>جرّب الآن</span>
+            </button>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
+
+      {/* How it Works Section */}
+      <AnimatedSection
+        id="how-it-works"
+        className="py-32 px-8 lg:px-16 bg-[#151515] border-t border-[#2a2a2a]"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+              كيف يعمل
+            </span>
+            <h2
+              className="text-4xl lg:text-5xl font-normal"
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              ثلاث خطوات <span className="italic text-[#c9a96e]">فقط</span>
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-12">
+            {[
+              {
+                number: "٠١",
+                title: "أدخل بياناتك",
+                desc: "قم بإدخال معلوماتك الشخصية وخبراتك ومهاراتك بسهولة",
+              },
+              {
+                number: "٠٢",
+                title: "خصّص التصميم",
+                desc: "اختر الألوان والخطوط التي تناسب ذوقك المهني",
+              },
+              {
+                number: "٠٣",
+                title: "حمّل وشارك",
+                desc: "احصل على سيرتك بصيغة PDF جاهزة للإرسال فوراً",
+              },
+            ].map((item, index) => (
+              <div key={index} className="text-center">
+                <div
+                  className="text-6xl lg:text-7xl font-normal text-[#c9a96e] mb-6"
+                  style={{ fontFamily: "'Amiri', serif" }}
+                >
+                  {item.number}
+                </div>
+                <h3
+                  className="text-2xl mb-4 text-[#fafafa]"
+                  style={{ fontFamily: "'Amiri', serif" }}
+                >
+                  {item.title}
+                </h3>
+                <p className="text-[#a8a8a8] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AnimatedSection>
+
+      {/* CTA Section */}
+      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2
+            className="text-4xl lg:text-6xl font-normal mb-8"
+            style={{ fontFamily: "'Amiri', serif" }}
+          >
+            جاهز لبناء <span className="italic text-[#c9a96e]">سيرتك؟</span>
+          </h2>
+          <p className="text-[#a8a8a8] text-lg mb-12 max-w-xl mx-auto">
+            ابدأ الآن مجاناً بدون تسجيل. سيرتك الذاتية الاحترافية على بعد خطوات قليلة.
+          </p>
+          <button
+            onClick={handleGetStarted}
+            className="group inline-flex items-center gap-4 bg-[#c9a96e] text-[#1a1a1a] px-12 py-6 text-sm tracking-[0.15em] uppercase hover:bg-[#fafafa] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
+          >
+            <span>ابدأ الآن مجاناً</span>
+            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+          </button>
+        </div>
+      </AnimatedSection>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-border/50 dark:border-white/5 bg-background/50 dark:bg-[#0a0a0f]/50 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:shadow-amber-500/40 transition-shadow">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <span className="font-bold text-lg block">ResumeArab</span>
-                <span className="text-sm text-muted-foreground dark:text-gray-500">
-                  منشئ السيرة الذاتية المجاني
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <a
-                href="https://github.com/mazenS1/Resume-FrontEnd"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground dark:text-gray-500 hover:text-foreground dark:hover:text-white transition-colors group"
+      <footer className="py-16 px-8 lg:px-16 bg-[#111] border-t border-[#2a2a2a]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <span
+                className="text-2xl tracking-[0.15em] font-light uppercase block mb-4"
+                style={{ fontFamily: "'Amiri', serif" }}
               >
-                <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                GitHub
-              </a>
+                ResumeArab
+              </span>
+              <p className="text-[#9a9a9a] text-sm leading-relaxed max-w-sm">
+                منشئ سيرة ذاتية مجاني ومفتوح المصدر، مصمم خصيصاً للباحثين عن عمل في الوطن العربي.
+              </p>
+            </div>
+
+            {/* Links */}
+            <div>
+              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">روابط</h4>
+              <ul className="space-y-3">
+                <li>
+                  <button
+                    onClick={handleGetStarted}
+                    className="text-[#9a9a9a] hover:text-[#c9a96e] transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] rounded px-1"
+                  >
+                    ابدأ الآن
+                  </button>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/mazenS1/ResumeArab"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#9a9a9a] hover:text-[#c9a96e] transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] rounded px-1"
+                  >
+                    GitHub
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">تواصل</h4>
+              <div className="flex gap-4">
+                <a
+                  href="https://github.com/mazenS1/ResumeArab"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 border border-[#333] flex items-center justify-center text-[#9a9a9a] hover:text-[#c9a96e] hover:border-[#c9a96e] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                  aria-label="GitHub"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-border/50 dark:border-white/5 text-center">
-            <p className="text-sm text-muted-foreground dark:text-gray-500">
-              صُنع بـ <span className="text-red-500 animate-pulse">❤️</span>{" "}
-              للباحثين عن عمل في الوطن العربي
+
+          {/* Bottom */}
+          <div className="pt-8 border-t border-[#2a2a2a] flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-[#8a8a8a] text-xs">
+              © {new Date().getFullYear()} ResumeArab. جميع الحقوق محفوظة.
             </p>
-            <p className="text-xs text-muted-foreground dark:text-gray-600 mt-2">
-              MIT License • مفتوح المصدر
+            <p className="text-[#8a8a8a] text-xs flex items-center gap-1">
+              صُنع بـ <Heart className="w-3 h-3 text-[#c9a96e]" /> للباحثين عن عمل
             </p>
           </div>
         </div>
       </footer>
-
-      {/* CSS Animations */}
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(2deg); }
-        }
-
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(-2deg); }
-        }
-
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.6; }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
-          animation-delay: 1s;
-        }
-
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
-        }
-
-        .animate-shimmer {
-          background-size: 200% 100%;
-          animation: shimmer 2s infinite linear;
-        }
-
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-
-        .animate-fade-in-down {
-          animation: fadeInDown 0.6s ease-out forwards;
-        }
-
-        .animate-fade-in-up {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeInDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animation-delay-100 { animation-delay: 100ms; }
-        .animation-delay-200 { animation-delay: 200ms; }
-        .animation-delay-300 { animation-delay: 300ms; }
-        .animation-delay-400 { animation-delay: 400ms; }
-        .animation-delay-500 { animation-delay: 500ms; }
-
-        .animate-on-scroll {
-          transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .animate-on-scroll.animate-in {
-          opacity: 1 !important;
-          transform: translateY(0) !important;
-        }
-      `}</style>
     </div>
   );
 };

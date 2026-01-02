@@ -1,31 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Preload critical fonts for better performance -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+
+    <!-- Primary Meta Tags -->
+    <title>ResumeArab - منشئ السيرة الذاتية المجاني | Free Arabic Resume Builder</title>
+    <meta name="title" content="ResumeArab - منشئ السيرة الذاتية المجاني | Free Arabic Resume Builder" />
     <meta
       name="description"
-      content="A free, open-source resume builder with Arabic/English support. Build ATS-friendly resumes that work offline."
+      content="أنشئ سيرة ذاتية احترافية بالعربية والإنجليزية مجاناً. متوافق مع ATS، يعمل بدون إنترنت، خصوصية تامة. Create professional ATS-friendly resumes in Arabic and English."
     />
     <meta
       name="keywords"
-      content="resume builder, CV maker, Arabic resume, ATS-friendly, free resume, open source"
+      content="سيرة ذاتية, CV عربي, resume builder, منشئ سيرة ذاتية, ATS-friendly, Arabic resume, CV maker, سيرة ذاتية مجانية, open source resume"
     />
-    <meta name="author" content="" />
-    <meta property="og:title" content="ResumeArab - Free Resume Builder" />
+    <meta name="author" content="ResumeArab" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="Arabic, English" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://resumearab.com/" />
+    <meta property="og:title" content="ResumeArab - منشئ السيرة الذاتية المجاني" />
     <meta
       property="og:description"
-      content="Create professional, ATS-friendly resumes in Arabic and English. Works offline, privacy-first."
+      content="أنشئ سيرة ذاتية احترافية بالعربية والإنجليزية مجاناً. متوافق مع ATS، يعمل بدون إنترنت، خصوصية تامة."
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:locale" content="ar_SA" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:site_name" content="ResumeArab" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ResumeArab - Free Resume Builder" />
+    <meta name="twitter:url" content="https://resumearab.com/" />
+    <meta name="twitter:title" content="ResumeArab - منشئ السيرة الذاتية المجاني" />
     <meta
       name="twitter:description"
-      content="Create professional, ATS-friendly resumes in Arabic and English. Works offline, privacy-first."
+      content="أنشئ سيرة ذاتية احترافية بالعربية والإنجليزية مجاناً. متوافق مع ATS، يعمل بدون إنترنت، خصوصية تامة."
     />
-    <title>ResumeArab - Free Resume Builder</title>
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="msapplication-TileColor" content="#1a1a1a" />
+
+    <!-- Additional SEO -->
+    <link rel="canonical" href="https://resumearab.com/" />
+
+    <!-- Noscript fallback for fonts -->
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
