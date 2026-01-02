@@ -14,7 +14,7 @@ import {
   Wifi,
   Heart,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { useAppModeStore } from "@/store/appModeStore";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ const AnimatedSection = ({
   children,
   className,
   delay = 0,
-  id
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -79,28 +79,28 @@ const AnimatedSection = ({
 const resumeTemplates = [
   {
     id: 1,
-    name: "أحمد محمد الخالدي",
+    name: "أحمد محمد",
     title: "مهندس برمجيات أول",
     skills: ["React", "Node.js", "Python", "AWS"],
     color: "#2a2825",
-    accent: "#3d3a36"
+    accent: "#3d3a36",
   },
   {
     id: 2,
-    name: "سارة أحمد العلي",
+    name: "سارة أحمد",
     title: "مديرة تسويق رقمي",
     skills: ["SEO", "Analytics", "Content", "Ads"],
     color: "#1e3a5f",
-    accent: "#2d4a6f"
+    accent: "#2d4a6f",
   },
   {
     id: 3,
-    name: "محمد خالد الرشيد",
+    name: "محمد خالد",
     title: "محلل بيانات",
     skills: ["SQL", "Tableau", "Python", "Excel"],
     color: "#2d3436",
-    accent: "#404548"
-  }
+    accent: "#404548",
+  },
 ];
 
 export const LandingPage = () => {
@@ -130,7 +130,9 @@ export const LandingPage = () => {
 
   const prevTemplate = useCallback(() => {
     setIsAutoPlaying(false);
-    setCurrentTemplate((prev) => (prev - 1 + resumeTemplates.length) % resumeTemplates.length);
+    setCurrentTemplate(
+      (prev) => (prev - 1 + resumeTemplates.length) % resumeTemplates.length
+    );
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -142,7 +144,10 @@ export const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-[#fafafa] overflow-hidden" dir="rtl">
+    <div
+      className="min-h-screen bg-[#1a1a1a] text-[#fafafa] overflow-hidden"
+      dir="rtl"
+    >
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 bg-[#1a1a1a]/80 backdrop-blur-md border-b border-[#2a2a2a]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -152,12 +157,17 @@ export const LandingPage = () => {
               isVisible ? "opacity-100" : "opacity-0"
             )}
           >
-            <span
-              className="text-lg tracking-[0.2em] font-light uppercase"
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#c9a96e] flex items-center justify-center">
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#1a1a1a]" />
+              </div>
+              <span
+              className="text-xl sm:text-2xl tracking-[0.2em] font-bold uppercase"
               style={{ fontFamily: "'Amiri', serif" }}
-            >
+              >
               سيرة
-            </span>
+              </span>
+            </div>
           </div>
 
           {/* Navigation Links */}
@@ -210,7 +220,9 @@ export const LandingPage = () => {
             <div
               className={cn(
                 "mb-8 transition-all duration-700 delay-200",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
               )}
             >
               <span className="text-xs tracking-[0.3em] uppercase text-[#666]">
@@ -221,36 +233,45 @@ export const LandingPage = () => {
             <h1
               className={cn(
                 "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal leading-[0.9] mb-6 sm:mb-8 transition-all duration-700 delay-300",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
               )}
               style={{ fontFamily: "'Amiri', serif" }}
             >
               <span className="block">سيرة ذاتية</span>
-              <span className="block mt-2 italic text-[#c9a96e]">استثنائية</span>
+              <span className="block mt-2 italic text-[#c9a96e]">
+                استثنائية
+              </span>
             </h1>
 
             <p
               className={cn(
                 "text-[#a0a0a0] text-base sm:text-lg lg:text-xl leading-relaxed max-w-md mb-8 sm:mb-12 transition-all duration-700 delay-500",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
               )}
             >
-              صمّم سيرتك الذاتية بأناقة تليق بطموحاتك المهنية.
-              متوافقة مع أنظمة التوظيف، بتصميم راقٍ لا يُنسى.
+              صمّم سيرتك الذاتية بأناقة تليق بطموحاتك المهنية. متوافقة مع أنظمة
+              التوظيف، بتصميم راقٍ لا يُنسى.
             </p>
 
             <div
               className={cn(
                 "transition-all duration-700 delay-700",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
               )}
             >
               <button
                 onClick={handleGetStarted}
-                className="group inline-flex items-center gap-3 sm:gap-4 bg-[#fafafa] text-[#1a1a1a] px-6 sm:px-10 py-4 sm:py-5 text-sm tracking-[0.15em] uppercase hover:bg-[#c9a96e] hover:text-[#1a1a1a] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
+                className="group relative inline-flex items-center gap-3 sm:gap-4 bg-[#fafafa] text-[#1a1a1a] px-6 sm:px-10 py-4 sm:py-5 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
               >
-                <span>ابدأ مجاناً</span>
-                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                <span className="absolute inset-0 bg-[#c9a96e] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                <span className="relative z-10">ابدأ مجاناً</span>
+                <ArrowLeft className="relative z-10 w-4 h-4 transition-transform group-hover:-translate-x-1" />
               </button>
             </div>
 
@@ -299,10 +320,7 @@ export const LandingPage = () => {
                   style={{ transform: `translateX(${currentTemplate * 100}%)` }}
                 >
                   {resumeTemplates.map((template) => (
-                    <div
-                      key={template.id}
-                      className="w-full flex-shrink-0"
-                    >
+                    <div key={template.id} className="w-full flex-shrink-0">
                       <div
                         className="relative text-[#d4d0cb] p-4 sm:p-8 lg:p-12 aspect-[8.5/11] shadow-2xl transition-colors duration-500"
                         style={{ backgroundColor: template.color }}
@@ -381,7 +399,9 @@ export const LandingPage = () => {
 
                         <div
                           className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent pointer-events-none"
-                          style={{ background: `linear-gradient(to top, ${template.color}, transparent)` }}
+                          style={{
+                            background: `linear-gradient(to top, ${template.color}, transparent)`,
+                          }}
                         />
                       </div>
                     </div>
@@ -392,10 +412,11 @@ export const LandingPage = () => {
                 <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 flex items-center justify-between">
                   <button
                     onClick={prevTemplate}
-                    className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white hover:bg-[#c9a96e] hover:text-[#1a1a1a] hover:border-[#c9a96e] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white overflow-hidden hover:border-[#c9a96e] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
                     aria-label="القالب السابق"
                   >
-                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute inset-0 bg-[#c9a96e] scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
+                    <ChevronRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-[#1a1a1a] transition-colors duration-300" />
                   </button>
 
                   {/* Dots indicator */}
@@ -420,10 +441,11 @@ export const LandingPage = () => {
 
                   <button
                     onClick={nextTemplate}
-                    className="w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white hover:bg-[#c9a96e] hover:text-[#1a1a1a] hover:border-[#c9a96e] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white overflow-hidden hover:border-[#c9a96e] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
                     aria-label="القالب التالي"
                   >
-                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute inset-0 bg-[#c9a96e] scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
+                    <ChevronLeft className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-[#1a1a1a] transition-colors duration-300" />
                   </button>
                 </div>
               </div>
@@ -431,7 +453,9 @@ export const LandingPage = () => {
               <div
                 className={cn(
                   "absolute -bottom-3 sm:-bottom-6 left-2 sm:-left-6 bg-[#c9a96e] text-[#1a1a1a] px-4 sm:px-6 py-2 sm:py-3 text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-700 delay-1000",
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
                 )}
               >
                 ATS متوافق
@@ -455,7 +479,8 @@ export const LandingPage = () => {
               className="text-4xl lg:text-5xl font-normal"
               style={{ fontFamily: "'Amiri', serif" }}
             >
-              كل ما تحتاجه في <span className="italic text-[#c9a96e]">مكان واحد</span>
+              كل ما تحتاجه في{" "}
+              <span className="italic text-[#c9a96e]">مكان واحد</span>
             </h2>
           </div>
 
@@ -496,14 +521,19 @@ export const LandingPage = () => {
                 key={index}
                 className="group p-8 border border-[#2a2a2a] hover:border-[#c9a96e]/30 bg-[#1f1f1f] hover:bg-[#242424] transition-all duration-500 focus-within:ring-2 focus-within:ring-[#c9a96e]"
               >
-                <feature.icon className="w-8 h-8 text-[#c9a96e] mb-6" strokeWidth={1.5} />
+                <feature.icon
+                  className="w-8 h-8 text-[#c9a96e] mb-6"
+                  strokeWidth={1.5}
+                />
                 <h3
                   className="text-xl mb-3 text-[#fafafa]"
                   style={{ fontFamily: "'Amiri', serif" }}
                 >
                   {feature.title}
                 </h3>
-                <p className="text-[#a8a8a8] text-sm leading-relaxed">{feature.desc}</p>
+                <p className="text-[#a8a8a8] text-sm leading-relaxed">
+                  {feature.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -528,13 +558,16 @@ export const LandingPage = () => {
                 خصوصيتك <span className="italic text-[#c9a96e]">أولويتنا</span>
               </h2>
               <p className="text-[#a8a8a8] text-lg leading-relaxed mb-8">
-                نؤمن بأن بياناتك الشخصية ملكك وحدك. لذلك صممنا التطبيق ليعمل بالكامل على جهازك دون الحاجة لإرسال أي معلومات لخوادم خارجية.
+                نؤمن بأن بياناتك الشخصية ملكك وحدك. لذلك صممنا التطبيق ليعمل
+                بالكامل على جهازك دون الحاجة لإرسال أي معلومات لخوادم خارجية.
               </p>
               <button
                 onClick={handleGetStarted}
                 className="inline-flex items-center gap-3 text-[#c9a96e] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#151515] rounded px-2 py-1"
               >
-                <span className="text-sm tracking-[0.1em] uppercase">ابدأ بأمان</span>
+                <span className="text-sm tracking-[0.1em] uppercase">
+                  ابدأ بأمان
+                </span>
                 <ArrowLeft className="w-4 h-4" />
               </button>
             </div>
@@ -566,8 +599,13 @@ export const LandingPage = () => {
                   key={index}
                   className="p-6 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#c9a96e]/30 transition-colors duration-300"
                 >
-                  <item.icon className="w-6 h-6 text-[#c9a96e] mb-4" strokeWidth={1.5} />
-                  <h3 className="text-base mb-2 text-[#fafafa]">{item.title}</h3>
+                  <item.icon
+                    className="w-6 h-6 text-[#c9a96e] mb-4"
+                    strokeWidth={1.5}
+                  />
+                  <h3 className="text-base mb-2 text-[#fafafa]">
+                    {item.title}
+                  </h3>
                   <p className="text-[#9a9a9a] text-sm">{item.desc}</p>
                 </div>
               ))}
@@ -600,16 +638,18 @@ export const LandingPage = () => {
               href="https://github.com/mazenS1/ResumeArab"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-[#fafafa] text-[#1a1a1a] px-8 py-4 text-sm tracking-[0.1em] uppercase hover:bg-[#c9a96e] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+              className="group relative inline-flex items-center justify-center gap-3 bg-[#fafafa] text-[#1a1a1a] px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
             >
-              <Github className="w-5 h-5" />
-              <span>عرض على GitHub</span>
+              <span className="absolute inset-0 bg-[#c9a96e] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <Github className="relative z-10 w-5 h-5" />
+              <span className="relative z-10">عرض على GitHub</span>
             </a>
             <button
               onClick={handleGetStarted}
-              className="inline-flex items-center justify-center gap-3 border border-[#444] text-[#fafafa] px-8 py-4 text-sm tracking-[0.1em] uppercase hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+              className="group relative inline-flex items-center justify-center gap-3 border border-[#444] text-[#fafafa] px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
             >
-              <span>جرّب الآن</span>
+              <span className="absolute inset-0 bg-[#c9a96e] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10 group-hover:text-[#1a1a1a] transition-colors duration-300">جرّب الآن</span>
             </button>
           </div>
         </div>
@@ -681,14 +721,16 @@ export const LandingPage = () => {
             جاهز لبناء <span className="italic text-[#c9a96e]">سيرتك؟</span>
           </h2>
           <p className="text-[#a8a8a8] text-lg mb-12 max-w-xl mx-auto">
-            ابدأ الآن مجاناً بدون تسجيل. سيرتك الذاتية الاحترافية على بعد خطوات قليلة.
+            ابدأ الآن مجاناً بدون تسجيل. سيرتك الذاتية الاحترافية على بعد خطوات
+            قليلة.
           </p>
           <button
             onClick={handleGetStarted}
-            className="group inline-flex items-center gap-4 bg-[#c9a96e] text-[#1a1a1a] px-12 py-6 text-sm tracking-[0.15em] uppercase hover:bg-[#fafafa] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
+            className="group relative inline-flex items-center gap-4 bg-[#c9a96e] text-[#1a1a1a] px-12 py-6 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
           >
-            <span>ابدأ الآن مجاناً</span>
-            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+            <span className="absolute inset-0 bg-[#fafafa] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+            <span className="relative z-10">ابدأ الآن مجاناً</span>
+            <ArrowLeft className="relative z-10 w-5 h-5 transition-transform group-hover:-translate-x-1" />
           </button>
         </div>
       </AnimatedSection>
@@ -703,16 +745,19 @@ export const LandingPage = () => {
                 className="text-2xl tracking-[0.15em] font-light uppercase block mb-4"
                 style={{ fontFamily: "'Amiri', serif" }}
               >
-                ResumeArab
+                سيرة
               </span>
               <p className="text-[#9a9a9a] text-sm leading-relaxed max-w-sm">
-                منشئ سيرة ذاتية مجاني ومفتوح المصدر، مصمم خصيصاً للباحثين عن عمل في الوطن العربي.
+                منشئ سيرة ذاتية مجاني ومفتوح المصدر، مصمم خصيصاً للباحثين عن عمل
+                في الوطن العربي.
               </p>
             </div>
 
             {/* Links */}
             <div>
-              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">روابط</h4>
+              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">
+                روابط
+              </h4>
               <ul className="space-y-3">
                 <li>
                   <button
@@ -737,7 +782,9 @@ export const LandingPage = () => {
 
             {/* Social */}
             <div>
-              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">تواصل</h4>
+              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">
+                تواصل
+              </h4>
               <div className="flex gap-4">
                 <a
                   href="https://github.com/mazenS1/ResumeArab"
@@ -755,10 +802,11 @@ export const LandingPage = () => {
           {/* Bottom */}
           <div className="pt-8 border-t border-[#2a2a2a] flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-[#8a8a8a] text-xs">
-              © {new Date().getFullYear()} ResumeArab. جميع الحقوق محفوظة.
+              © {new Date().getFullYear()} سيرة جميع الحقوق محفوظة.
             </p>
             <p className="text-[#8a8a8a] text-xs flex items-center gap-1">
-              صُنع بـ <Heart className="w-3 h-3 text-[#c9a96e]" /> للباحثين عن عمل
+              صُنع بـ <Heart className="w-3 h-3 text-[#c9a96e]" /> للباحثين عن
+              عمل
             </p>
           </div>
         </div>

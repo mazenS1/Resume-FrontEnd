@@ -1,23 +1,21 @@
 import { FileText, Globe, Sparkles, Shield, WifiOff, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useAppModeStore } from "@/store/appModeStore";
 import { useResumeStore } from "@/store/resumeStore";
 import { sampleResume } from "@/data/sampleResume";
 import { sampleResumeAr } from "@/data/sampleResumeAr";
 import { nanoid } from "nanoid";
 import type { Resume } from "@resume/shared";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { cn } from "@/lib/utils";
 
 export const WelcomeScreen = () => {
   const language = useAppModeStore((state) => state.language);
   const setLanguage = useAppModeStore((state) => state.setLanguage);
-  const setHasCompletedOnboarding = useAppModeStore((state) => state.setHasCompletedOnboarding);
+  const setHasCompletedOnboarding = useAppModeStore(
+    (state) => state.setHasCompletedOnboarding
+  );
   const saveResume = useAppModeStore((state) => state.saveResume);
   const setActiveResumeId = useAppModeStore((state) => state.setActiveResumeId);
   const setResume = useResumeStore((state) => state.setResume);
-  
-  // Always show UI in Arabic (RTL)
-  const isRTL = true;
 
   const createBlankResume = (): Resume => {
     const id = nanoid();
@@ -33,7 +31,7 @@ export const WelcomeScreen = () => {
         phone: null,
         location: null,
         headline: null,
-        links: []
+        links: [],
       },
       metadata: {
         locale: language === "ar" ? "ar-SA" : "en-US",
@@ -41,7 +39,7 @@ export const WelcomeScreen = () => {
         fontFamily: language === "ar" ? "IBM Plex Sans Arabic" : "EB Garamond",
         lineHeight: 1.4,
         accentColor: "#0F172A",
-        primaryColor: "#0F172A"
+        primaryColor: "#0F172A",
       },
       sections: [
         {
@@ -51,22 +49,24 @@ export const WelcomeScreen = () => {
           titleOverride: language === "ar" ? "الملخص" : "Summary",
           position: 0,
           collapsed: false,
-          entries: [{
-            id: nanoid(),
-            sectionId: "",
-            position: 0,
-            title: language === "ar" ? "الملخص" : "Summary",
-            bullets: [],
-            subtitle: null,
-            companyOrOrg: null,
-            location: null,
-            startDate: null,
-            endDate: null,
-            isCurrent: false,
-            description: "",
-            projectUrl: null,
-            techStack: []
-          }]
+          entries: [
+            {
+              id: nanoid(),
+              sectionId: "",
+              position: 0,
+              title: language === "ar" ? "الملخص" : "Summary",
+              bullets: [],
+              subtitle: null,
+              companyOrOrg: null,
+              location: null,
+              startDate: null,
+              endDate: null,
+              isCurrent: false,
+              description: "",
+              projectUrl: null,
+              techStack: [],
+            },
+          ],
         },
         {
           id: nanoid(),
@@ -75,7 +75,7 @@ export const WelcomeScreen = () => {
           titleOverride: language === "ar" ? "الخبرات" : "Experience",
           position: 1,
           collapsed: false,
-          entries: []
+          entries: [],
         },
         {
           id: nanoid(),
@@ -84,7 +84,7 @@ export const WelcomeScreen = () => {
           titleOverride: language === "ar" ? "التعليم" : "Education",
           position: 2,
           collapsed: false,
-          entries: []
+          entries: [],
         },
         {
           id: nanoid(),
@@ -93,9 +93,9 @@ export const WelcomeScreen = () => {
           titleOverride: language === "ar" ? "المهارات" : "Skills",
           position: 3,
           collapsed: false,
-          entries: []
-        }
-      ]
+          entries: [],
+        },
+      ],
     };
   };
 
@@ -108,8 +108,9 @@ export const WelcomeScreen = () => {
   };
 
   const handleLoadSample = () => {
-    const sample = structuredClone(language === "ar" ? sampleResumeAr : sampleResume);
-    // Create a new ID so it's a fresh copy
+    const sample = structuredClone(
+      language === "ar" ? sampleResumeAr : sampleResume
+    );
     sample.id = nanoid();
     sample.createdAt = new Date().toISOString();
     sample.updatedAt = new Date().toISOString();
@@ -120,116 +121,137 @@ export const WelcomeScreen = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex flex-col"
-      dir={isRTL ? "rtl" : "ltr"}
+    <div
+      className="min-h-screen bg-[#1a1a1a] text-[#fafafa] flex flex-col"
+      dir="rtl"
     >
       {/* Header */}
-      <header className="flex justify-between items-center p-4 sm:p-6">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center">
-            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
+      <header className="flex justify-between items-center p-4 sm:p-6 border-b border-[#2a2a2a]">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#c9a96e] flex items-center justify-center">
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#1a1a1a]" />
           </div>
-          <span className="font-semibold text-sm sm:text-base hidden sm:inline">منشئ السيرة الذاتية</span>
+          <span
+            className="text-lg sm:text-xl tracking-[0.1em] font-bold uppercase"
+            style={{ fontFamily: "'Amiri', serif" }}
+          >
+            سيرة
+          </span>
         </div>
-        <ThemeToggle />
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pb-12">
-        <div className="w-full max-w-lg text-center space-y-8">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+        <div className="w-full max-w-lg space-y-8">
           {/* Hero */}
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium">
+          <div className="text-center space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 border border-[#c9a96e]/30 text-[#c9a96e] text-xs sm:text-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              جاهز لأنظمة التوظيف الذكية
+              <span>جاهز لأنظمة التوظيف الذكية</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-              يلا نبني سيرتك الذاتية! 🚀
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl font-normal leading-tight"
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              يلا نبني{" "}
+              <span className="italic text-[#c9a96e]">سيرتك الذاتية</span>
             </h1>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto">
-              سوّي سيرة ذاتية احترافية في دقايق معدودة، بدون تعقيد وبشكل يناسب سوق العمل
+            <p className="text-[#a8a8a8] text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+              سوّي سيرة ذاتية احترافية في دقايق معدودة، بدون تعقيد وبشكل يناسب
+              سوق العمل
             </p>
           </div>
 
           {/* Language Selection */}
-          <div className="space-y-3 bg-muted/50 rounded-xl p-4 border border-border/50">
-            <p className="text-sm font-medium text-muted-foreground flex items-center justify-center gap-2">
-              <Globe className="w-4 h-4" />
-              اختر لغة السيرة الذاتية
-            </p>
-            <p className="text-xs text-muted-foreground/70">
+          <div className="space-y-4 border border-[#2a2a2a] bg-[#1f1f1f] p-5 sm:p-6">
+            <div className="flex items-center justify-center gap-2 text-sm text-[#a8a8a8]">
+              <Globe className="w-4 h-4 text-[#c9a96e]" />
+              <span>اختر لغة السيرة الذاتية</span>
+            </div>
+            <p className="text-xs text-[#777] text-center">
               هذا الخيار يحدد لغة محتوى سيرتك الذاتية فقط
             </p>
             <div className="flex gap-3 justify-center">
-              <Button
-                variant={language === "en" ? "default" : "outline"}
-                size="lg"
-                onClick={() => setLanguage("en")}
-                className="min-w-[140px] h-12 text-base"
-              >
-                English Resume
-              </Button>
-              <Button
-                variant={language === "ar" ? "default" : "outline"}
-                size="lg"
+              <div className="relative">
+                <span className="absolute -top-3 -right-3 z-10 bg-[#22c55e] text-white text-[9px] px-1.5 py-0.5 font-medium rotate-12 shadow-sm">
+                  موصى به
+                </span>
+                <button
+                  onClick={() => setLanguage("en")}
+                  className={cn(
+                    "relative min-w-[130px] sm:min-w-[140px] h-12 text-sm tracking-wide overflow-hidden transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]",
+                    language === "en"
+                      ? "bg-[#c9a96e] text-[#1a1a1a]"
+                      : "border border-[#444] text-[#fafafa] hover:border-[#c9a96e]"
+                  )}
+                >
+                  English Resume
+                </button>
+              </div>
+              <button
                 onClick={() => setLanguage("ar")}
-                className="min-w-[140px] h-12 text-base font-arabic"
+                className={cn(
+                  "relative min-w-[130px] sm:min-w-[140px] h-12 text-sm tracking-wide overflow-hidden transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]",
+                  language === "ar"
+                    ? "bg-[#c9a96e] text-[#1a1a1a]"
+                    : "border border-[#444] text-[#fafafa] hover:border-[#c9a96e]"
+                )}
                 style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}
               >
                 سيرة بالعربي
-              </Button>
+              </button>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="space-y-3 pt-4">
-            <Button
-              size="lg"
+          <div className="space-y-3">
+            <button
               onClick={handleStartFresh}
-              className="w-full h-14 text-base sm:text-lg font-semibold"
+              className="group relative w-full h-14 bg-[#fafafa] text-[#1a1a1a] text-base sm:text-lg font-semibold tracking-wide overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
             >
-              ابدأ من الصفر ✨
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
+              <span className="absolute inset-0 bg-[#c9a96e] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10">ابدأ من الصفر</span>
+            </button>
+            <button
               onClick={handleLoadSample}
-              className="w-full h-14 text-base sm:text-lg"
+              className="group relative w-full h-14 border border-[#444] text-[#fafafa] text-base sm:text-lg tracking-wide overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
             >
-              شوف مثال جاهز
-            </Button>
+              <span className="absolute inset-0 bg-[#c9a96e] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10 group-hover:text-[#1a1a1a] transition-colors duration-300">
+                شوف مثال جاهز
+              </span>
+            </button>
           </div>
 
-          {/* Security Features - More Prominent */}
-          <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-medium">
+          {/* Security Features */}
+          <div className="border border-[#2a2a2a] bg-[#1f1f1f] p-5">
+            <div className="flex items-center justify-center gap-2 text-[#c9a96e] font-medium mb-4">
               <Shield className="w-5 h-5" />
               <span>خصوصيتك أولويتنا</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-              <div className="flex flex-col items-center gap-1.5 p-2">
-                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                  <Lock className="w-4 h-4 text-green-600 dark:text-green-400" />
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="flex flex-col items-center gap-2 p-2">
+                <div className="w-10 h-10 border border-[#333] flex items-center justify-center">
+                  <Lock className="w-4 h-4 text-[#c9a96e]" />
                 </div>
-                <p className="text-xs text-green-700 dark:text-green-400">
-                  بياناتك محفوظة على جهازك فقط
+                <p className="text-[10px] sm:text-xs text-[#9a9a9a]">
+                  بياناتك على جهازك فقط
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-1.5 p-2">
-                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                  <WifiOff className="w-4 h-4 text-green-600 dark:text-green-400" />
+              <div className="flex flex-col items-center gap-2 p-2">
+                <div className="w-10 h-10 border border-[#333] flex items-center justify-center">
+                  <WifiOff className="w-4 h-4 text-[#c9a96e]" />
                 </div>
-                <p className="text-xs text-green-700 dark:text-green-400">
+                <p className="text-[10px] sm:text-xs text-[#9a9a9a]">
                   يشتغل بدون نت
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-1.5 p-2">
-                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
+              <div className="flex flex-col items-center gap-2 p-2">
+                <div className="w-10 h-10 border border-[#333] flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-[#c9a96e]" />
                 </div>
-                <p className="text-xs text-green-700 dark:text-green-400">
-                  ما نشارك بياناتك مع أي طرف
+                <p className="text-[10px] sm:text-xs text-[#9a9a9a]">
+                  ما نشارك بياناتك
                 </p>
               </div>
             </div>
@@ -238,37 +260,32 @@ export const WelcomeScreen = () => {
           {/* Features */}
           <div className="grid grid-cols-3 gap-4 pt-2 text-center">
             <div className="space-y-2">
-              <div className="w-10 h-10 mx-auto rounded-full bg-muted flex items-center justify-center">
-                <FileText className="w-5 h-5 text-muted-foreground" />
+              <div className="w-12 h-12 mx-auto border border-[#333] flex items-center justify-center">
+                <FileText className="w-5 h-5 text-[#c9a96e]" />
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                تصميم احترافي
-              </p>
+              <p className="text-xs text-[#9a9a9a]">تصميم احترافي</p>
             </div>
             <div className="space-y-2">
-              <div className="w-10 h-10 mx-auto rounded-full bg-muted flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-muted-foreground" />
+              <div className="w-12 h-12 mx-auto border border-[#333] flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-[#c9a96e]" />
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                متوافق مع ATS
-              </p>
+              <p className="text-xs text-[#9a9a9a]">متوافق مع ATS</p>
             </div>
             <div className="space-y-2">
-              <div className="w-10 h-10 mx-auto rounded-full bg-muted flex items-center justify-center">
-                <Globe className="w-5 h-5 text-muted-foreground" />
+              <div className="w-12 h-12 mx-auto border border-[#333] flex items-center justify-center">
+                <Globe className="w-5 h-5 text-[#c9a96e]" />
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                عربي وإنجليزي
-              </p>
+              <p className="text-xs text-[#9a9a9a]">عربي وإنجليزي</p>
             </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="p-4 text-center">
-        <p className="text-xs text-muted-foreground">
-          صُنع بـ ❤️ للباحثين عن عمل في الوطن العربي
+      <footer className="p-4 text-center border-t border-[#2a2a2a]">
+        <p className="text-xs text-[#777]">
+          صُنع بـ <span className="text-[#c9a96e]">♥</span> للباحثين عن عمل في
+          الوطن العربي
         </p>
       </footer>
     </div>
