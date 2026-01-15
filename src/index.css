@@ -25,48 +25,50 @@ html[lang="ar"] {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-    --ring: 221.2 83.2% 53.3%;
+    /* New warm beige/brown color scheme */
+    --background: 36 33% 86%;          /* #E8DED1 - Light beige background */
+    --foreground: 22 33% 18%;          /* #3E2A1F - Dark brown text */
+    --muted: 36 44% 92%;               /* #F5F1E8 - Light muted */
+    --muted-foreground: 22 17% 36%;    /* #6B5A4D - Medium brown muted text */
+    --popover: 36 33% 86%;             /* Same as background */
+    --popover-foreground: 22 33% 18%;  /* Same as foreground */
+    --card: 36 33% 86%;                /* Same as background */
+    --card-foreground: 22 33% 18%;     /* Same as foreground */
+    --border: 36 24% 79%;              /* #D4CABD - Light brown border */
+    --input: 36 44% 92%;               /* #F5F1E8 - Light input background */
+    --primary: 20 40% 39%;             /* #8B5A3C - Brown primary */
+    --primary-foreground: 36 33% 86%;  /* Light text on primary */
+    --secondary: 36 44% 92%;           /* Light secondary */
+    --secondary-foreground: 22 33% 18%; /* Dark text on secondary */
+    --accent: 20 51% 55%;              /* #C67B55 - Warm orange accent */
+    --accent-foreground: 22 33% 18%;   /* Dark text on accent */
+    --destructive: 0 84.2% 60.2%;      /* Keep red for destructive */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --ring: 20 51% 55%;                /* Accent color for focus rings */
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --ring: 217.2 91.2% 59.8%;
+    /* New dark brown color scheme */
+    --background: 20 25% 13%;          /* #2A1F1A - Very dark brown background */
+    --foreground: 36 33% 86%;          /* #E8DED1 - Light beige text */
+    --muted: 20 19% 20%;               /* #3D3028 - Dark muted */
+    --muted-foreground: 22 12% 68%;    /* #B8AFA4 - Light muted text */
+    --popover: 20 25% 13%;             /* Same as background */
+    --popover-foreground: 36 33% 86%;  /* Same as foreground */
+    --card: 20 25% 13%;                /* Same as background */
+    --card-foreground: 36 33% 86%;     /* Same as foreground */
+    --border: 20 19% 20%;              /* #3D3028 - Dark border */
+    --input: 20 19% 20%;               /* #3D3028 - Dark input background */
+    --primary: 20 40% 39%;             /* #8B5A3C - Same brown primary */
+    --primary-foreground: 36 33% 86%;  /* Light text on primary */
+    --secondary: 20 19% 20%;           /* Dark secondary */
+    --secondary-foreground: 36 33% 86%; /* Light text on secondary */
+    --accent: 20 51% 55%;              /* #C67B55 - Same warm orange accent */
+    --accent-foreground: 36 33% 86%;   /* Light text on accent */
+    --destructive: 0 62.8% 30.6%;      /* Darker red for dark mode */
+    --destructive-foreground: 0 85.7% 97.3%; /* Light text on destructive */
+    --ring: 20 51% 55%;                /* Accent color for focus rings */
   }
 
   * {
@@ -515,4 +517,178 @@ html[lang="ar"] {
     padding: 0.35in 0.4in 0.4in 0.4in;
     page-break-after: avoid;
   }
+}
+
+/* ========================================
+   Logo Styles - New Brand Logo
+   ======================================== */
+
+.logo-integrated {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 54px;
+  background: #8B5A3C;
+  border-radius: 5px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 0;
+  border-color: transparent #6B4529 transparent transparent;
+}
+
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 7px;
+  right: 7px;
+  bottom: 8px;
+  background: hsl(var(--background));
+  border-radius: 2px;
+}
+
+.profile-circle {
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 11px;
+  z-index: 1;
+}
+
+.profile-circle::before {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: #5C7A5F;
+  border-radius: 50%;
+}
+
+.profile-circle::after {
+  content: '';
+  position: absolute;
+  width: 5.5px;
+  height: 11px;
+  right: 0;
+  background: #C67B55;
+  border-radius: 0 5.5px 5.5px 0;
+}
+
+.logo-lines {
+  position: absolute;
+  top: 27px;
+  left: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.logo-lines .line-1,
+.logo-lines .line-2,
+.logo-lines .line-3 {
+  position: absolute;
+  left: 0;
+  height: 1.5px;
+  background: #8B5A3C;
+  border-radius: 1px;
+}
+
+.logo-lines .line-1 {
+  top: 0;
+  width: 100%;
+}
+
+.logo-lines .line-2 {
+  top: 6px;
+  width: 85%;
+}
+
+.logo-lines .line-3 {
+  top: 12px;
+  width: 70%;
+}
+
+.logo-text {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: hsl(var(--foreground));
+  line-height: 1;
+}
+
+/* Logo - Small Size */
+.logo-small .logo-icon {
+  width: 32px;
+  height: 44px;
+}
+
+.logo-small .logo-icon::before {
+  border-width: 0 8px 8px 0;
+}
+
+.logo-small .logo-icon::after {
+  top: 8px;
+  left: 5px;
+  right: 5px;
+  bottom: 6px;
+}
+
+.logo-small .profile-circle {
+  top: 11px;
+  width: 9px;
+  height: 9px;
+}
+
+.logo-small .profile-circle::before {
+  width: 9px;
+  height: 9px;
+}
+
+.logo-small .profile-circle::after {
+  width: 4.5px;
+  height: 9px;
+  border-radius: 0 4.5px 4.5px 0;
+}
+
+.logo-small .logo-lines {
+  top: 23px;
+  left: 8px;
+  right: 8px;
+}
+
+.logo-small .logo-lines .line-1,
+.logo-small .logo-lines .line-2,
+.logo-small .logo-lines .line-3 {
+  height: 1.5px;
+}
+
+.logo-small .logo-lines .line-2 {
+  top: 5px;
+}
+
+.logo-small .logo-lines .line-3 {
+  top: 10px;
+}
+
+.logo-small .logo-integrated {
+  gap: 8px;
+}
+
+.logo-small .logo-text {
+  font-size: 24px;
 }
