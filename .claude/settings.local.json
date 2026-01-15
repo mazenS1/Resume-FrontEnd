@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:fonts.googleapis.com)",
-      "Bash(npx tsc --noEmit)"
+      "Bash(npx tsc --noEmit)",
+      "Bash(timeout /t 5)"
     ]
   }
 }
