@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { useAppModeStore } from "@/store/appModeStore";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/common/Logo";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 // Custom hook for intersection observer (scroll animations)
 const useInView = (options = {}) => {
@@ -145,11 +147,11 @@ export const LandingPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-[#1a1a1a] text-[#fafafa] overflow-hidden"
+      className="min-h-screen bg-background text-foreground overflow-hidden"
       dir="rtl"
     >
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 bg-[#1a1a1a]/80 backdrop-blur-md border-b border-[#2a2a2a]">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-16 py-4 sm:py-6 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div
             className={cn(
@@ -157,17 +159,7 @@ export const LandingPage = () => {
               isVisible ? "opacity-100" : "opacity-0"
             )}
           >
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#c9a96e] flex items-center justify-center">
-              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#1a1a1a]" />
-              </div>
-              <span
-              className="text-xl sm:text-2xl tracking-[0.2em] font-bold uppercase"
-              style={{ fontFamily: "'Amiri', serif" }}
-              >
-              سيرة
-              </span>
-            </div>
+            <Logo size="small" />
           </div>
 
           {/* Navigation Links */}
@@ -180,7 +172,7 @@ export const LandingPage = () => {
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}
-                className="text-xs tracking-[0.1em] uppercase text-[#9a9a9a] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded px-2 py-1"
+                className="text-xs tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded px-2 py-1"
               >
                 {link.label}
               </button>
@@ -188,11 +180,12 @@ export const LandingPage = () => {
           </nav>
 
           <div className="flex items-center gap-4 sm:gap-6">
+            <ThemeToggle />
             <a
               href="https://github.com/mazenS1/ResumeArab"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#9a9a9a] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded p-1"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded p-1"
               aria-label="View on GitHub"
             >
               <Github className="w-5 h-5" />
@@ -200,7 +193,7 @@ export const LandingPage = () => {
             <button
               onClick={handleGetStarted}
               className={cn(
-                "text-xs tracking-[0.15em] uppercase text-[#b0b0b0] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] rounded px-2 py-1",
+                "text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded px-2 py-1",
                 isVisible ? "opacity-100" : "opacity-0"
               )}
             >
@@ -212,7 +205,7 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col justify-center px-4 sm:px-8 lg:px-16 pt-24 overflow-hidden">
-        <div className="absolute top-0 bottom-0 right-[15%] w-px bg-gradient-to-b from-transparent via-[#444] to-transparent opacity-50 hidden sm:block" />
+        <div className="absolute top-0 bottom-0 right-[15%] w-px bg-gradient-to-b from-transparent via-border to-transparent opacity-50 hidden sm:block" />
 
         <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-24 items-center py-16 sm:py-32">
           {/* Text Column - Always first on mobile for context */}
@@ -240,14 +233,14 @@ export const LandingPage = () => {
               style={{ fontFamily: "'Amiri', serif" }}
             >
               <span className="block">سيرة ذاتية</span>
-              <span className="block mt-2 italic text-[#c9a96e]">
+              <span className="block mt-2 italic text-accent">
                 استثنائية
               </span>
             </h1>
 
             <p
               className={cn(
-                "text-[#a0a0a0] text-base sm:text-lg lg:text-xl leading-relaxed max-w-md mb-8 sm:mb-12 transition-all duration-700 delay-500",
+                "text-muted-foreground text-base sm:text-lg lg:text-xl leading-relaxed max-w-md mb-8 sm:mb-12 transition-all duration-700 delay-500",
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -267,9 +260,9 @@ export const LandingPage = () => {
             >
               <button
                 onClick={handleGetStarted}
-                className="group relative inline-flex items-center gap-3 sm:gap-4 bg-[#fafafa] text-[#1a1a1a] px-6 sm:px-10 py-4 sm:py-5 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
+                className="group relative inline-flex items-center gap-3 sm:gap-4 bg-primary text-accent-foreground px-6 sm:px-10 py-4 sm:py-5 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
-                <span className="absolute inset-0 bg-[#c9a96e] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                <span className="absolute inset-0 bg-accent translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10">ابدأ مجاناً</span>
                 <ArrowLeft className="relative z-10 w-4 h-4 transition-transform group-hover:-translate-x-1" />
               </button>
@@ -277,7 +270,7 @@ export const LandingPage = () => {
 
             <div
               className={cn(
-                "flex flex-wrap gap-6 sm:gap-12 mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-[#333] transition-all duration-700 delay-900",
+                "flex flex-wrap gap-6 sm:gap-12 mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-border transition-all duration-700 delay-900",
                 isVisible ? "opacity-100" : "opacity-0"
               )}
             >
@@ -288,12 +281,12 @@ export const LandingPage = () => {
               ].map((stat, index) => (
                 <div key={index}>
                   <div
-                    className="text-xl sm:text-2xl lg:text-3xl font-normal text-[#c9a96e] mb-1"
+                    className="text-xl sm:text-2xl lg:text-3xl font-normal text-accent mb-1"
                     style={{ fontFamily: "'Amiri', serif" }}
                   >
                     {stat.value}
                   </div>
-                  <div className="text-[10px] sm:text-xs tracking-[0.1em] uppercase text-[#a8a8a8]">
+                  <div className="text-[10px] sm:text-xs tracking-[0.1em] uppercase text-muted-foreground">
                     {stat.label}
                   </div>
                 </div>
@@ -310,8 +303,8 @@ export const LandingPage = () => {
               )}
             >
               {/* Decorative borders - hidden on mobile to prevent overflow */}
-              <div className="absolute -inset-8 border border-[#333] hidden sm:block" />
-              <div className="absolute -inset-4 border border-[#444] hidden sm:block" />
+              <div className="absolute -inset-8 border border-border hidden sm:block" />
+              <div className="absolute -inset-4 border border-border hidden sm:block" />
 
               {/* Template Carousel */}
               <div className="relative overflow-hidden">
@@ -412,11 +405,11 @@ export const LandingPage = () => {
                 <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 flex items-center justify-between">
                   <button
                     onClick={prevTemplate}
-                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white overflow-hidden hover:border-[#c9a96e] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-white overflow-hidden hover:border-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     aria-label="القالب السابق"
                   >
-                    <span className="absolute inset-0 bg-[#c9a96e] scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
-                    <ChevronRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-[#1a1a1a] transition-colors duration-300" />
+                    <span className="absolute inset-0 bg-accent scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
+                    <ChevronRight className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-accent-foreground transition-colors duration-300" />
                   </button>
 
                   {/* Dots indicator */}
@@ -429,10 +422,10 @@ export const LandingPage = () => {
                           setCurrentTemplate(index);
                         }}
                         className={cn(
-                          "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]",
+                          "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                           currentTemplate === index
-                            ? "bg-[#c9a96e] w-4 sm:w-6"
-                            : "bg-[#555] hover:bg-[#777]"
+                            ? "bg-accent w-4 sm:w-6"
+                            : "bg-muted hover:bg-muted-foreground"
                         )}
                         aria-label={`انتقل للقالب ${index + 1}`}
                       />
@@ -441,18 +434,18 @@ export const LandingPage = () => {
 
                   <button
                     onClick={nextTemplate}
-                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#444] flex items-center justify-center text-white overflow-hidden hover:border-[#c9a96e] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                    className="group relative w-8 h-8 sm:w-10 sm:h-10 bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-white overflow-hidden hover:border-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     aria-label="القالب التالي"
                   >
-                    <span className="absolute inset-0 bg-[#c9a96e] scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
-                    <ChevronLeft className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-[#1a1a1a] transition-colors duration-300" />
+                    <span className="absolute inset-0 bg-accent scale-0 group-hover:scale-100 transition-transform duration-300 rounded-sm" />
+                    <ChevronLeft className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:text-accent-foreground transition-colors duration-300" />
                   </button>
                 </div>
               </div>
 
               <div
                 className={cn(
-                  "absolute -bottom-3 sm:-bottom-6 left-2 sm:-left-6 bg-[#c9a96e] text-[#1a1a1a] px-4 sm:px-6 py-2 sm:py-3 text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-700 delay-1000",
+                  "absolute -bottom-3 sm:-bottom-6 left-2 sm:-left-6 bg-accent text-accent-foreground px-4 sm:px-6 py-2 sm:py-3 text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-700 delay-1000",
                   isVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-4"
@@ -468,11 +461,11 @@ export const LandingPage = () => {
       {/* Features Section */}
       <AnimatedSection
         id="features"
-        className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]"
+        className="py-32 px-8 lg:px-16 border-t border-border"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground block mb-4">
               المميزات
             </span>
             <h2
@@ -480,7 +473,7 @@ export const LandingPage = () => {
               style={{ fontFamily: "'Amiri', serif" }}
             >
               كل ما تحتاجه في{" "}
-              <span className="italic text-[#c9a96e]">مكان واحد</span>
+              <span className="italic text-accent">مكان واحد</span>
             </h2>
           </div>
 
@@ -519,19 +512,19 @@ export const LandingPage = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group p-8 border border-[#2a2a2a] hover:border-[#c9a96e]/30 bg-[#1f1f1f] hover:bg-[#242424] transition-all duration-500 focus-within:ring-2 focus-within:ring-[#c9a96e]"
+                className="group p-8 border border-border hover:border-accent/30 bg-card hover:bg-muted transition-all duration-500 focus-within:ring-2 focus-within:ring-accent"
               >
                 <feature.icon
-                  className="w-8 h-8 text-[#c9a96e] mb-6"
+                  className="w-8 h-8 text-accent mb-6"
                   strokeWidth={1.5}
                 />
                 <h3
-                  className="text-xl mb-3 text-[#fafafa]"
+                  className="text-xl mb-3 text-foreground"
                   style={{ fontFamily: "'Amiri', serif" }}
                 >
                   {feature.title}
                 </h3>
-                <p className="text-[#a8a8a8] text-sm leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {feature.desc}
                 </p>
               </div>
@@ -543,27 +536,27 @@ export const LandingPage = () => {
       {/* Security Section */}
       <AnimatedSection
         id="security"
-        className="py-32 px-8 lg:px-16 bg-[#151515] border-t border-[#2a2a2a]"
+        className="py-32 px-8 lg:px-16 bg-muted border-t border-border"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground block mb-4">
                 الأمان والخصوصية
               </span>
               <h2
                 className="text-4xl lg:text-5xl font-normal mb-8"
                 style={{ fontFamily: "'Amiri', serif" }}
               >
-                خصوصيتك <span className="italic text-[#c9a96e]">أولويتنا</span>
+                خصوصيتك <span className="italic text-accent">أولويتنا</span>
               </h2>
-              <p className="text-[#a8a8a8] text-lg leading-relaxed mb-8">
+              <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                 نؤمن بأن بياناتك الشخصية ملكك وحدك. لذلك صممنا التطبيق ليعمل
                 بالكامل على جهازك دون الحاجة لإرسال أي معلومات لخوادم خارجية.
               </p>
               <button
                 onClick={handleGetStarted}
-                className="inline-flex items-center gap-3 text-[#c9a96e] hover:text-white transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#151515] rounded px-2 py-1"
+                className="inline-flex items-center gap-3 text-accent hover:text-foreground transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded px-2 py-1"
               >
                 <span className="text-sm tracking-[0.1em] uppercase">
                   ابدأ بأمان
@@ -597,16 +590,16 @@ export const LandingPage = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="p-6 border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#c9a96e]/30 transition-colors duration-300"
+                  className="p-6 border border-border bg-background hover:border-accent/30 transition-colors duration-300"
                 >
                   <item.icon
-                    className="w-6 h-6 text-[#c9a96e] mb-4"
+                    className="w-6 h-6 text-accent mb-4"
                     strokeWidth={1.5}
                   />
-                  <h3 className="text-base mb-2 text-[#fafafa]">
+                  <h3 className="text-base mb-2 text-foreground">
                     {item.title}
                   </h3>
-                  <p className="text-[#9a9a9a] text-sm">{item.desc}</p>
+                  <p className="text-muted-foreground text-sm">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -615,20 +608,20 @@ export const LandingPage = () => {
       </AnimatedSection>
 
       {/* Open Source Section */}
-      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]">
+      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#333] mb-8">
-            <Github className="w-10 h-10 text-[#c9a96e]" strokeWidth={1.5} />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-border mb-8">
+            <Github className="w-10 h-10 text-accent" strokeWidth={1.5} />
           </div>
 
           <h2
             className="text-4xl lg:text-5xl font-normal mb-6"
             style={{ fontFamily: "'Amiri', serif" }}
           >
-            مفتوح <span className="italic text-[#c9a96e]">المصدر</span>
+            مفتوح <span className="italic text-accent">المصدر</span>
           </h2>
 
-          <p className="text-[#a8a8a8] text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
             نؤمن بالشفافية والمشاركة. الكود المصدري متاح بالكامل على GitHub.
             يمكنك المساهمة في تطوير المشروع أو استخدامه كما تشاء.
           </p>
@@ -638,18 +631,18 @@ export const LandingPage = () => {
               href="https://github.com/mazenS1/ResumeArab"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center gap-3 bg-[#fafafa] text-[#1a1a1a] px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+              className="group relative inline-flex items-center justify-center gap-3 bg-primary text-accent-foreground px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <span className="absolute inset-0 bg-[#c9a96e] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <span className="absolute inset-0 bg-accent translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
               <Github className="relative z-10 w-5 h-5" />
               <span className="relative z-10">عرض على GitHub</span>
             </a>
             <button
               onClick={handleGetStarted}
-              className="group relative inline-flex items-center justify-center gap-3 border border-[#444] text-[#fafafa] px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a]"
+              className="group relative inline-flex items-center justify-center gap-3 border border-border text-foreground px-8 py-4 text-sm tracking-[0.1em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <span className="absolute inset-0 bg-[#c9a96e] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-              <span className="relative z-10 group-hover:text-[#1a1a1a] transition-colors duration-300">جرّب الآن</span>
+              <span className="absolute inset-0 bg-accent -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10 group-hover:text-accent-foreground transition-colors duration-300">جرّب الآن</span>
             </button>
           </div>
         </div>
@@ -658,18 +651,18 @@ export const LandingPage = () => {
       {/* How it Works Section */}
       <AnimatedSection
         id="how-it-works"
-        className="py-32 px-8 lg:px-16 bg-[#151515] border-t border-[#2a2a2a]"
+        className="py-32 px-8 lg:px-16 bg-muted border-t border-border"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <span className="text-xs tracking-[0.3em] uppercase text-[#9a9a9a] block mb-4">
+            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground block mb-4">
               كيف يعمل
             </span>
             <h2
               className="text-4xl lg:text-5xl font-normal"
               style={{ fontFamily: "'Amiri', serif" }}
             >
-              ثلاث خطوات <span className="italic text-[#c9a96e]">فقط</span>
+              ثلاث خطوات <span className="italic text-accent">فقط</span>
             </h2>
           </div>
 
@@ -693,18 +686,18 @@ export const LandingPage = () => {
             ].map((item, index) => (
               <div key={index} className="text-center">
                 <div
-                  className="text-6xl lg:text-7xl font-normal text-[#c9a96e] mb-6"
+                  className="text-6xl lg:text-7xl font-normal text-accent mb-6"
                   style={{ fontFamily: "'Amiri', serif" }}
                 >
                   {item.number}
                 </div>
                 <h3
-                  className="text-2xl mb-4 text-[#fafafa]"
+                  className="text-2xl mb-4 text-foreground"
                   style={{ fontFamily: "'Amiri', serif" }}
                 >
                   {item.title}
                 </h3>
-                <p className="text-[#a8a8a8] leading-relaxed">{item.desc}</p>
+                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -712,23 +705,23 @@ export const LandingPage = () => {
       </AnimatedSection>
 
       {/* CTA Section */}
-      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-[#2a2a2a]">
+      <AnimatedSection className="py-32 px-8 lg:px-16 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
           <h2
             className="text-4xl lg:text-6xl font-normal mb-8"
             style={{ fontFamily: "'Amiri', serif" }}
           >
-            جاهز لبناء <span className="italic text-[#c9a96e]">سيرتك؟</span>
+            جاهز لبناء <span className="italic text-accent">سيرتك؟</span>
           </h2>
-          <p className="text-[#a8a8a8] text-lg mb-12 max-w-xl mx-auto">
+          <p className="text-muted-foreground text-lg mb-12 max-w-xl mx-auto">
             ابدأ الآن مجاناً بدون تسجيل. سيرتك الذاتية الاحترافية على بعد خطوات
             قليلة.
           </p>
           <button
             onClick={handleGetStarted}
-            className="group relative inline-flex items-center gap-4 bg-[#c9a96e] text-[#1a1a1a] px-12 py-6 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1a1a1a]"
+            className="group relative inline-flex items-center gap-4 bg-accent text-accent-foreground px-12 py-6 text-sm tracking-[0.15em] uppercase overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           >
-            <span className="absolute inset-0 bg-[#fafafa] translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+            <span className="absolute inset-0 bg-primary translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
             <span className="relative z-10">ابدأ الآن مجاناً</span>
             <ArrowLeft className="relative z-10 w-5 h-5 transition-transform group-hover:-translate-x-1" />
           </button>
@@ -736,7 +729,7 @@ export const LandingPage = () => {
       </AnimatedSection>
 
       {/* Footer */}
-      <footer className="py-16 px-8 lg:px-16 bg-[#111] border-t border-[#2a2a2a]">
+      <footer className="py-16 px-8 lg:px-16 bg-card border-t border-border">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             {/* Brand */}
@@ -747,7 +740,7 @@ export const LandingPage = () => {
               >
                 سيرة
               </span>
-              <p className="text-[#9a9a9a] text-sm leading-relaxed max-w-sm">
+              <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
                 منشئ سيرة ذاتية مجاني ومفتوح المصدر، مصمم خصيصاً للباحثين عن عمل
                 في الوطن العربي.
               </p>
@@ -755,14 +748,14 @@ export const LandingPage = () => {
 
             {/* Links */}
             <div>
-              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">
+              <h4 className="text-sm tracking-[0.1em] uppercase text-muted-foreground mb-4">
                 روابط
               </h4>
               <ul className="space-y-3">
                 <li>
                   <button
                     onClick={handleGetStarted}
-                    className="text-[#9a9a9a] hover:text-[#c9a96e] transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] rounded px-1"
+                    className="text-muted-foreground hover:text-accent transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded px-1"
                   >
                     ابدأ الآن
                   </button>
@@ -772,7 +765,7 @@ export const LandingPage = () => {
                     href="https://github.com/mazenS1/ResumeArab"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#9a9a9a] hover:text-[#c9a96e] transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] rounded px-1"
+                    className="text-muted-foreground hover:text-accent transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded px-1"
                   >
                     GitHub
                   </a>
@@ -782,7 +775,7 @@ export const LandingPage = () => {
 
             {/* Social */}
             <div>
-              <h4 className="text-sm tracking-[0.1em] uppercase text-[#a8a8a8] mb-4">
+              <h4 className="text-sm tracking-[0.1em] uppercase text-muted-foreground mb-4">
                 تواصل
               </h4>
               <div className="flex gap-4">
@@ -790,7 +783,7 @@ export const LandingPage = () => {
                   href="https://github.com/mazenS1/ResumeArab"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 border border-[#333] flex items-center justify-center text-[#9a9a9a] hover:text-[#c9a96e] hover:border-[#c9a96e] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e]"
+                  className="w-10 h-10 border border-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label="GitHub"
                 >
                   <Github className="w-5 h-5" />
@@ -800,12 +793,12 @@ export const LandingPage = () => {
           </div>
 
           {/* Bottom */}
-          <div className="pt-8 border-t border-[#2a2a2a] flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-[#8a8a8a] text-xs">
+          <div className="pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-muted-foreground text-xs">
               © {new Date().getFullYear()} سيرة جميع الحقوق محفوظة.
             </p>
-            <p className="text-[#8a8a8a] text-xs flex items-center gap-1">
-              صُنع بـ <Heart className="w-3 h-3 text-[#c9a96e]" /> للباحثين عن
+            <p className="text-muted-foreground text-xs flex items-center gap-1">
+              صُنع بـ <Heart className="w-3 h-3 text-accent" /> للباحثين عن
               عمل
             </p>
           </div>
